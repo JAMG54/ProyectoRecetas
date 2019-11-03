@@ -95,6 +95,7 @@ alter table Calificacion_gusto add foreign key (id_receta) references Receta (id
 alter table Calificacion_origenMX add foreign key (id_receta) references Receta (id_Receta) on delete cascade on update cascade;
 alter table instrucciones_receta add foreign key (id_receta) references Receta (id_receta) on delete cascade on update cascade;
 alter table configuracion_personal add foreign key (id_usuario) references usuario_registrado (id_usuario) on delete cascade on update cascade;
+alter table receta add foreign key (Autor_receta) references usuario_registrado (id_usuario) on delete cascade on update  cascade;
 
 
 insert into Tipo_Platillo (id_platillo,Nombre_platillo) values (1, "Desayuno");
