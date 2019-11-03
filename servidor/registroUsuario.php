@@ -9,6 +9,7 @@
     $correo=$_POST['correo'];
     $estado=$_POST['estado'];
     $clave=$_POST['clave'];
-    $respuestaMetodo=$usuarioNuevo->registrarUsuario($nombreUsr, $paterno, $materno, $edad, $correo, $estado, $clave);
+    $ocupacion=$_POST['ocupacion'];
+    $respuestaMetodo=$usuarioNuevo->registrarUsuario($nombreUsr, $paterno, $materno, $edad, $correo, $estado, $clave,$ocupacion);
     echo $respuestaMetodo;
 ?>

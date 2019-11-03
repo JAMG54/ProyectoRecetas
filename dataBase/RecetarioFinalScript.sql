@@ -12,6 +12,7 @@ Edad int not null,
 Correo_electronico varchar(50) not null,
 Estado_Procedencia int not null,
 contrasenia varchar(50) not null,
+ocupacion varchar(50) not null,
 Validado int not null
 );
 
@@ -147,7 +148,7 @@ insert into Estados (id_estado, Nombre_Estado) values (32,"Zacatecas");
 drop procedure if exists registraUsuario;
 delimiter **
 
-create procedure registrarUsuario(nombreUsr varchar(50),paterno varchar(50), materno varchar(50), edad int, correo  varchar(50), estado int,clave varchar(50))
+create procedure registrarUsuario(nombreUsr varchar(50),paterno varchar(50), materno varchar(50), edad int, correo  varchar(50), estado int,clave varchar(50),ocupacionUsr varchar(50))
 begin								
 	declare mensaje varchar(100); # es para devolver un mensaje en función de lo que pase en el procedure
     declare identificador int;
@@ -163,7 +164,7 @@ begin
 				set mensaje="Este registro ya existe.";
 			when 0 then
 				set identificador=(select ifnull(max(id_usuario),0)+1 from Usuario_Registrado);
-				insert into Usuario_Registrado values(identificador,nombreUsr,paterno,materno,edad,correo,estado,clave,0);
+				insert into Usuario_Registrado values(identificador,nombreUsr,paterno,materno,edad,correo,estado,clave,ocupacionUsr,0);
 				set mensaje="Registrado. Valida tu cuenta desde tu correo.";
         end case;
         select mensaje as respuesta; #seleccionamos el mesaje (es equivalente a return mensaje)

@@ -15,24 +15,17 @@
 include ("../dataBase/BaseDatos.php");
 
 class usuarioVisitante {
-    private $nombre="";
-    private $paterno=""; 
-    private $materno="";
-    private $edad=0;
-    private $correo=""; 
-    private $estado="";
-    
-    
-    public function registrarUsuario($nombreUsr ,$paterno,$materno ,$edad,$correo ,$estado,$clave){
+     
+    public function registrarUsuario($nombreUsr ,$paterno,$materno ,$edad,$correo ,$estado,$clave,$ocupacion){
          $retorno="";
         
-        if($nombreUsr =="" or $paterno=="" or $materno =="" or $edad=="" or $correo =="" or $estado=="" or $clave ==""){
+        if($nombreUsr =="" or $paterno=="" or $materno =="" or $edad=="" or $correo =="" or $estado=="" or $clave =="" or $ocupacion==""){
             $retorno="Falta llenar campos";
         }else{
             $obj = new BaseDatos();
             $conexion = new mysqli($obj->servidor, $obj->usuario, $obj->clave, $obj->nombreBD); 
             if ($conexion) { 
-                $query = "call registrarUsuario('$nombreUsr','$paterno','$materno',$edad,'$correo',$estado,'$clave');"; 
+                $query = "call registrarUsuario('$nombreUsr','$paterno','$materno',$edad,'$correo',$estado,'$clave','$ocupacion');"; 
                 $resultado = $conexion->query($query); 
                 if (!$resultado) { 
                     $retorno= 'No se pudo ejecutar la consulta: ' . $conexion->error;

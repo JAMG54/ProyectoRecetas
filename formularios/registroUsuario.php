@@ -58,6 +58,7 @@ and open the template in the editor.
                 <option value="31">Yucatán </option>
                 <option value="32">Zacatecas</option>
             </select>
+            <input type="text" required id="ocupacion" name="ocupacion" placeholder="Ocupacion">
             <input type="password" required id="clave" name="clave" placeholder="Clave">
             <input type="submit" value="Enviar" id="guardar">
         </form>  
