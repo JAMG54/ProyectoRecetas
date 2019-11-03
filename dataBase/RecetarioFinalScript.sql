@@ -1,4 +1,4 @@
-
+drop database if exists RecetarioFinal;
 create database RecetarioFinal;
 
 use RecetarioFinal;
@@ -19,7 +19,8 @@ id_receta int not null,
 Nombre_Platillo varchar(50) not null,
 Origen int not null,
 Tipo_Platillo int not null,
-Foto_Receta longblob not null
+Foto_Receta longblob not null,
+Autor_receta int not null
 );
 
 create table Ingredientes (
@@ -35,13 +36,13 @@ cantidad int not null
 );
 
 create table Calificacion_origenMX (
-calificacion int not null,
-id_receta int not null
+id_receta int not null,
+calificacion int not null
 );
 
 create table Calificacion_gusto (
-calificacion int not null,
-id_receta int not null
+id_receta int not null,
+calificacion int not null
 );
 
 create table Configuracion_Personal (
@@ -67,19 +68,31 @@ Instruccion varchar(300) not null,
 No_paso int not null
 );
 
+create table Administrador (
+id_admi int not null,
+Nombre varchar (50) not null,
+Apellido_paterno varchar (45) not null,
+Apellido_materno varchar (45) not null,
+Correo_electronico varchar (50) not null
+);
+
 alter table Usuario_Registrado add primary key(id_usuario);
 alter table Receta add primary key(id_receta);
 alter table Ingredientes add primary key(id_ingrediente);
 alter table Rel_Ingrediente_Receta add primary key(id_relacion);
 alter table Instrucciones_Receta add primary key(id_instruccion);
+alter table Estados add primary key (id_estado);
+alter table tipo_platillo add primary key (id_platillo);
 
-alter table Estados add foreign key (id_estado) references usuario_registrado (Estado_Procedencia) on delete cascade on update  cascade;
-alter table Estados add foreign key (id_estado) references Receta (Origen) on delete cascade on update cascade;
-alter table tipo_platillo add foreign key (id_platillo) references Receta (Tipo_platillo) on delete cascade on update cascade;
+
+
+alter table usuario_registrado add foreign key (Estado_Procedencia) references Estados (id_estado) on delete cascade on update  cascade;
+alter table receta add foreign key (Origen) references estados (id_estado) on delete cascade on update cascade;
+alter table receta add foreign key (Tipo_Platillo) references tipo_platillo (id_platillo) on delete cascade on update cascade;
 alter table Rel_Ingrediente_Receta add foreign key (id_receta) references Receta (id_receta) on delete cascade on update cascade;
 alter table Rel_Ingrediente_Receta add foreign key (id_ingrediente) references Ingredientes (id_ingrediente) on delete cascade on update cascade;
-alter table calificacion_gusto add foreign key (id_receta) references Receta (id_receta) on delete cascade on update cascade;
-alter table calificacion_origenmx add foreign key (id_receta) references Receta (id_receta) on delete cascade on update cascade;
+alter table Calificacion_gusto add foreign key (id_receta) references Receta (id_receta) on delete cascade on update cascade;
+alter table Calificacion_origenMX add foreign key (id_receta) references Receta (id_Receta) on delete cascade on update cascade;
 alter table instrucciones_receta add foreign key (id_receta) references Receta (id_receta) on delete cascade on update cascade;
 alter table configuracion_personal add foreign key (id_usuario) references usuario_registrado (id_usuario) on delete cascade on update cascade;
 
@@ -90,7 +103,7 @@ insert into Tipo_Platillo (id_platillo,Nombre_platillo) values (3, "Cena");
 insert into Tipo_Platillo (id_platillo,Nombre_platillo) values (4, "Merienda");
 insert into Tipo_Platillo (id_platillo,Nombre_platillo) values (5, "Bebida");
 insert into Tipo_Platillo (id_platillo,Nombre_platillo) values (6, "Postre");
-select * from estados;
+
 insert into Estados (id_estado, Nombre_Estado) values (1,"Aguascalientes");
 insert into Estados (id_estado, Nombre_Estado) values (2,"Baja California");
 insert into Estados (id_estado, Nombre_Estado) values (3,"Baja California Sur");
@@ -124,3 +137,33 @@ insert into Estados (id_estado, Nombre_Estado) values (30,"Veracruz ");
 insert into Estados (id_estado, Nombre_Estado) values (31,"Yucatán");
 insert into Estados (id_estado, Nombre_Estado) values (32,"Zacatecas");
 
+
+#Procedimientos almacenados Molina******
+
+	#Registrar Usuario.
+
+drop procedure if exists registraUsuario;
+delimiter **
+
+create procedure registrarUsuario(nombreUsr varchar(50),paterno varchar(50), materno varchar(50), edad int, correo  varchar(50), estado int)
+begin								
+	declare mensaje varchar(100); # es para devolver un mensaje en función de lo que pase en el procedure
+    declare identificador int;
+    declare existencia int;
+    
+    set mensaje = "";
+		#para este ejemplo verificamos que no haya usuarios con el mismo nombre en la bd
+    set existencia=(select count(*) from Usuario_Registrado where Correo_electronico=correo); 
+		
+        #esto es un switch
+        case(existencia)
+			when 1 then
+				set mensaje="Este registro ya existe.";
+			when 0 then
+				set identificador=(select ifnull(max(id_usuario),0)+1 from Usuario_Registrado);
+				insert into Usuario_Registrado values(identificador,nombreUsr,paterno,materno,edad,correo,estado,0);
+				set mensaje="Registrado. Valida tu cuenta desde tu correo.";
+        end case;
+        select mensaje as respuesta; #seleccionamos el mesaje (es equivalente a return mensaje)
+end;**
+delimiter ;
