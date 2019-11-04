@@ -42,4 +42,35 @@ class usuarioRegistrado {
         return $retorno;
     }
     
+    function getNombre() {
+        return $this->nombre;
+    }
+
+    function getPaterno() {
+        return $this->paterno;
+    }
+
+    function getMaterno() {
+        return $this->materno;
+    }
+
+    function getEdad() {
+        return $this->edad;
+    }
+
+    function getCorreo() {
+        return $this->correo;
+    }
+
+    function getEstado() {
+        return $this->estado;
+    }
+
+    function getOcupacion() {
+        return $this->ocupacion;
+    }
+
+    function getClave() {
+        return $this->clave;
+    }    
 }

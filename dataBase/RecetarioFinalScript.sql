@@ -47,9 +47,13 @@ id_receta int not null,
 calificacion int not null
 );
 
-create table Configuracion_Personal (
+create table foto_usuario (
 id_usuario int not null,
-foto_perfil longblob not null,
+foto_perfil longblob not null
+);
+
+create table descripcion_usuario (
+id_usuario int not null,
 descripcion_personal varchar(300) not null
 );
 
@@ -96,8 +100,9 @@ alter table Rel_Ingrediente_Receta add foreign key (id_ingrediente) references I
 alter table Calificacion_gusto add foreign key (id_receta) references Receta (id_receta) on delete cascade on update cascade;
 alter table Calificacion_origenMX add foreign key (id_receta) references Receta (id_Receta) on delete cascade on update cascade;
 alter table instrucciones_receta add foreign key (id_receta) references Receta (id_receta) on delete cascade on update cascade;
-alter table configuracion_personal add foreign key (id_usuario) references usuario_registrado (id_usuario) on delete cascade on update cascade;
 alter table receta add foreign key (Autor_receta) references usuario_registrado (id_usuario) on delete cascade on update  cascade;
+alter table foto_usuario add foreign key (id_usuario) references usuario_registrado (id_usuario) on delete cascade on update cascade;
+alter table descripcion_usuario add foreign key (id_usuario) references usuario_registrado (id_usuario) on delete cascade on update cascade;
 
 
 insert into Tipo_Platillo (id_platillo,Nombre_platillo) values (1, "Desayuno");
@@ -165,7 +170,8 @@ begin
 			when 0 then
 				set identificador=(select ifnull(max(id_usuario),0)+1 from Usuario_Registrado);
 				insert into Usuario_Registrado values(identificador,nombreUsr,paterno,materno,edad,correo,estado,md5(clave),ocupacionUsr,0);
-				set mensaje=identificador;
+				insert into descripcion_personal values(identificador," ");
+                set mensaje=identificador;
         end case;
         select mensaje as respuesta; #seleccionamos el mesaje (es equivalente a return mensaje)
 end;**
@@ -174,9 +180,18 @@ delimiter ;
 drop procedure if exists validarCuenta;
 delimiter **
 
+	#Validar cuenta.
 create procedure validarCuenta(idUser int)
 begin								
     update Usuario_Registrado set validado=1 where id_usuario=idUser;
 end;**
 delimiter ;
 
+#ObtenerInformacionPerfil
+drop procedure if exists obtenerInformacionPersonal;
+delimiter **
+create procedure obtenerInformacionPersonal(idUser int)
+begin								
+    select * from usuario_registrado inner join descripcion_usuario on usuario_registrado.id_usuario=descripcion_usuario.id_usuario;
+end;**
+delimiter ;

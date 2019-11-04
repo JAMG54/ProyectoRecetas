@@ -28,7 +28,7 @@ and open the template in the editor.
             <form id="formSes">
                 <input type="email" required id="correo" name="correo" placeholder="Correo electrónico">
                 <input type="password" required id="clave" name="clave" placeholder="Clave">
-                <input type="submit" value="Enviar" id="guardar">
+                <input type="submit" value="Acceder" id="guardar">
             </form>
         </div>
     </body>
