@@ -41,9 +41,7 @@ and open the template in the editor.
                 url:"../servidor/iniciarSesion.php",
                 data:datos,
                 success:function(r){
-                    var p=new String;
-                    p=r;
-                    if(p.trim() === '1'){
+                    if(r==1){
                         window.locationf="../PaginasServer/cuentaRegistrado.php";                    
                     }else{
                         var resp=document.getElementById("mensaje");
