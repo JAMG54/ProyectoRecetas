@@ -4,6 +4,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
+
 <?php
     $validacion = isset($_REQUEST["r"])?$_REQUEST["r"]:""; // recibe el idUsuario desde el link del correo electrónico
     if($validacion!=""){
@@ -41,8 +42,9 @@ and open the template in the editor.
                 url:"../servidor/iniciarSesion.php",
                 data:datos,
                 success:function(r){
-                    if(r==1){
-                        window.locationf="../PaginasServer/cuentaRegistrado.php";                    
+                    var resultado=$.trim(r)
+                    if(resultado.indexOf("1")>-1){
+                        location.href="../PaginasServer/cuentaRegistrado.php";                    
                     }else{
                         var resp=document.getElementById("mensaje");
                         resp.innerHTML="<h7>"+r+"<h7>";

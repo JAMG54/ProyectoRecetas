@@ -10,7 +10,6 @@ and open the template in the editor.
     $clave=$_POST['clave'];
     $mensaje="";
     if ($correo != "" && $clave != "") {
-        $mensaje="1";
         $obj = new BaseDatos();
         $mysqli = new mysqli($obj->servidor, $obj->usuario, $obj->clave, $obj->nombreBD);
         if ($mysqli->set_charset("utf8")) {
@@ -21,9 +20,15 @@ and open the template in the editor.
                 $resultado = $preparaConsulta->get_result();
                 if ($resultado->num_rows > 0) {
                     if ($filas = $resultado->fetch_assoc()) {
-                        $_SESSION["identificador"] = $filas["id_usuario"];
-                        $_SESSION["tipo"] = "registrado";
-                        $_SESSION["activada"] = "v";
+                        if($filas["Validado"]=="1"){
+                            $_SESSION["identificador"] = $filas["id_usuario"];
+                            $_SESSION["tipo"] = "registrado";
+                            $_SESSION["activada"] = "v";
+                            $mensaje="1";
+                        }else{
+                            $mensaje="Valida tu cuenta en tu correo electrónico.";
+                        }
+                        
                     }
                 }else {
                     $mensaje = "Los datos ingresados son incorrectos";
