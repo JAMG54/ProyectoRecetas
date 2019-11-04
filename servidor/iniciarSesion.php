@@ -5,6 +5,11 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <?php
+    session_start();
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+    
     include ("../dataBase/BaseDatos.php");
     $correo=$_POST['correo'];
     $clave=$_POST['clave'];
@@ -28,7 +33,6 @@ and open the template in the editor.
                         }else{
                             $mensaje="Valida tu cuenta en tu correo electrónico.";
                         }
-                        
                     }
                 }else {
                     $mensaje = "Los datos ingresados son incorrectos";

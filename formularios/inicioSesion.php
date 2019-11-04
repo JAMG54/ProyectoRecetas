@@ -42,6 +42,7 @@ and open the template in the editor.
                 url:"../servidor/iniciarSesion.php",
                 data:datos,
                 success:function(r){
+                    alert(r);
                     var resultado=$.trim(r)
                     if(resultado.indexOf("1")>-1){
                         location.href="../PaginasServer/cuentaRegistrado.php";                    
