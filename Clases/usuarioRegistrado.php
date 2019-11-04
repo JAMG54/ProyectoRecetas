@@ -11,6 +11,8 @@
  *
  * @author USER
  */
+include ("../dataBase/BaseDatos.php");
+
 class usuarioRegistrado {
     private $nombre="";
     private $paterno=""; 
@@ -20,4 +22,24 @@ class usuarioRegistrado {
     private $estado="";
     private $ocupacion="";
     private $clave="";
+    
+    public function validarRegistro($idUsuario){
+        $retorno="";
+        $obj = new BaseDatos();
+        $conexion = new mysqli($obj->servidor, $obj->usuario, $obj->clave, $obj->nombreBD); 
+        if ($conexion) { 
+            $query = "call validarCuenta($idUsuario);"; 
+            $resultado = $conexion->query($query); 
+            if (!$resultado) { 
+                $retorno= "<font color='red'>Ha ocurrido un error.</font>";
+            } else {
+                $retorno="<font color='green'>Cuenta validada</font>";
+                $conexion->close();
+            }
+        } else {
+            echo "No se conectó";
+        }
+        return $retorno;
+    }
+    
 }

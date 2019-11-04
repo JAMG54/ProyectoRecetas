@@ -13,9 +13,12 @@
  */
 
 include ("../dataBase/BaseDatos.php");
+include ("../Clases/correo.php");
 
 class usuarioVisitante {
-     
+    
+    private $mail;
+    
     public function registrarUsuario($nombreUsr ,$paterno,$materno ,$edad,$correo ,$estado,$clave,$ocupacion){
          $retorno="";
         
@@ -32,6 +35,13 @@ class usuarioVisitante {
                 } else {
                     $row=$resultado->fetch_assoc();
                     $retorno=$row['respuesta'];
+                    if($retorno!="0"){
+                        $this->mail=new correo();
+                        $this->mail->mandarCorreoValidacion($correo,$retorno);
+                        $retorno="Registrado.Valida tu cuenta desde tu correo electrónico.";
+                    }else{
+                        $retono="Este regitro ya existe.";
+                    }
                     $conexion->close();
                 }
             } else {
