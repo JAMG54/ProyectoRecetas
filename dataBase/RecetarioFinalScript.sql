@@ -210,6 +210,3 @@ delimiter **
     end;**
 	delimiter ;
 
-select * from descripcion_usuario;
-call obtenerInformacionPersonal(1);
-update usuario_registrado set validado=1 where id_usuario=1;

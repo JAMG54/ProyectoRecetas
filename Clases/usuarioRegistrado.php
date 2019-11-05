@@ -23,6 +23,7 @@ class usuarioRegistrado {
     private $ocupacion="";
     private $clave="";
     private $descripcion="";
+    private $foto;
     
     public function validarRegistro($idUsuario){
         $retorno="";
@@ -118,6 +119,54 @@ class usuarioRegistrado {
         }
         return $retorno;
     }
+    
+    public function verificarFoto($idUsuario){
+        $retorno="";
+        $obj = new BaseDatos();
+        $conexion = new mysqli($obj->servidor, $obj->usuario, $obj->clave, $obj->nombreBD);
+        if ($conexion) {
+            $query = "select count(*) as numero from foto_usuario where id_usuario=$idUsuario;";
+            $resultado = $conexion->query($query);
+            if (!$resultado) {
+                $retorno = 'No se pudo ejecutar la consulta: ' . $conexion->error;
+            } else {
+                if($row = $resultado->fetch_assoc()){
+                    $retorno=$row["numero"];
+                }
+                $conexion->close();
+            }
+        } else {
+            echo "No se conectó";
+        }
+        return $retorno;
+    }
+    
+    public function modificarImagen($idUsuario,$imagen,$opcion) {
+        $retorno="";
+        $obj = new BaseDatos();
+        $conexion = new mysqli($obj->servidor, $obj->usuario, $obj->clave, $obj->nombreBD);
+        if ($conexion) {
+            $query ="";
+            if($opcion=="1"){
+                $query = "update foto_usuario set foto_perfil='$imagen' where id_usuario=$idUsuario;";
+            }else{
+                 $query = "insert into foto_usuario values($idUsuario,'$imagen');";
+            }
+            
+            $resultado = $conexion->query($query);
+
+            if (!$resultado) {
+                $retorno= 'No se pudo ejecutar la consulta: ' . $conexion->error;
+            } else {
+                $retorno= 'La imagen fue guardada';
+                $conexion->close();
+            }
+        } else {
+            $retorno= "No se conectó";
+        }
+        
+        return $retorno;
+    }
 
     public function getNombre() {
         return $this->nombre;
@@ -154,5 +203,33 @@ class usuarioRegistrado {
     public function getDescripcion() {
         return $this->descripcion;
     }
-    
+
+    public function getFoto($idUsuario) {
+        
+        $obj = new BaseDatos();
+        $conexion = new mysqli($obj->servidor, $obj->usuario, $obj->clave, $obj->nombreBD);
+        if ($conexion) {
+            //vamos a ejecutar un procedimiento almacenado
+            $query = "select foto_perfil from foto_usuario where id_usuario=$idUsuario;";
+            $resultado = $conexion->query($query);
+
+            if (!$resultado) {
+                echo 'No se pudo ejecutar la consulta: ' . $conexion->error;
+            } else {
+                if($row=$resultado->fetch_assoc()){
+                    $this->setFoto("<img border='1' alt='Foto de perfi' width='400' height='300' src='data:image/jpg;base64,". base64_encode($row["foto_perfil"])."'/>");
+                }
+                $conexion->close();
+            }
+        } else {
+            echo "No se conectó";
+        }
+        return $this->foto;
+    }
+
+    public function setFoto($foto) {
+        $this->foto = $foto;
+    }
+
+
 }

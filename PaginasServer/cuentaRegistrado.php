@@ -14,7 +14,7 @@
         </head>
         <body>
             <a href="../PaginasServer/miInformacion.php">Modificar mi información</a>
-            <a href="">Agregar o modificar foto de perfil</a>
+            <a href="../PaginasServer/miFotoPerfil.php">Agregar o modificar foto de perfil</a>
             <a href="">Cambiar mi contrasenia</a>
         </body>
     </html>
