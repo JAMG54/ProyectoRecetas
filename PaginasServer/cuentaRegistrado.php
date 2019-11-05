@@ -13,7 +13,7 @@
             <meta charset="UTF-8">
         </head>
         <body>
-            <a href="">Modificar mi información</a>
+            <a href="../PaginasServer/miInformacion.php">Modificar mi información</a>
             <a href="">Agregar o modificar foto de perfil</a>
             <a href="">Cambiar mi contrasenia</a>
         </body>

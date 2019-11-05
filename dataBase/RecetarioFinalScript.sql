@@ -148,50 +148,68 @@ insert into Estados (id_estado, Nombre_Estado) values (32,"Zacatecas");
 
 #Procedimientos almacenados Molina******
 
-	#Registrar Usuario.
+#*************Registrar Usuario.
 
-drop procedure if exists registrarUsuario;
-delimiter **
+	drop procedure if exists registrarUsuario;
+	delimiter **
 
-create procedure registrarUsuario(nombreUsr varchar(50),paterno varchar(50), materno varchar(50), edad int, correo  varchar(50), estado int,clave varchar(50),ocupacionUsr varchar(50))
-begin								
-	declare mensaje varchar(100); # es para devolver un mensaje en función de lo que pase en el procedure
-    declare identificador int;
-    declare existencia int;
-    
-    set mensaje = "";
-		#para este ejemplo verificamos que no haya usuarios con el mismo nombre en la bd
-    set existencia=(select count(*) from Usuario_Registrado where Correo_electronico=correo); 
+	create procedure registrarUsuario(nombreUsr varchar(50),paterno varchar(50), materno varchar(50), edad int, correo  varchar(50), estado int,clave varchar(50),ocupacionUsr varchar(50))
+	begin								
+		declare mensaje varchar(100); # es para devolver un mensaje en función de lo que pase en el procedure
+		declare identificador int;
+		declare existencia int;
 		
-        #esto es un switch
-        case(existencia)
-			when 1 then
-				set mensaje="0";
-			when 0 then
-				set identificador=(select ifnull(max(id_usuario),0)+1 from Usuario_Registrado);
-				insert into Usuario_Registrado values(identificador,nombreUsr,paterno,materno,edad,correo,estado,md5(clave),ocupacionUsr,0);
-				insert into descripcion_personal values(identificador," ");
-                set mensaje=identificador;
-        end case;
-        select mensaje as respuesta; #seleccionamos el mesaje (es equivalente a return mensaje)
-end;**
-delimiter ;
+		set mensaje = "";
+			#para este ejemplo verificamos que no haya usuarios con el mismo nombre en la bd
+		set existencia=(select count(*) from Usuario_Registrado where Correo_electronico=correo); 
+			
+			#esto es un switch
+			case(existencia)
+				when 1 then
+					set mensaje="0";
+				when 0 then
+					set identificador=(select ifnull(max(id_usuario),0)+1 from Usuario_Registrado);
+					insert into Usuario_Registrado values(identificador,nombreUsr,paterno,materno,edad,correo,estado,md5(clave),ocupacionUsr,0);
+					insert into descripcion_usuario values(identificador," ");
+					set mensaje=identificador;
+			end case;
+			select mensaje as respuesta; #seleccionamos el mesaje (es equivalente a return mensaje)
+	end;**
+	delimiter ;
 
 drop procedure if exists validarCuenta;
 delimiter **
 
-	#Validar cuenta.
-create procedure validarCuenta(idUser int)
-begin								
-    update Usuario_Registrado set validado=1 where id_usuario=idUser;
-end;**
-delimiter ;
+#********Validar cuenta.
+	create procedure validarCuenta(idUser int)
+	begin								
+		update Usuario_Registrado set validado=1 where id_usuario=idUser;
+	end;**
+	delimiter ;
 
-#ObtenerInformacionPerfil
-drop procedure if exists obtenerInformacionPersonal;
-delimiter **
-create procedure obtenerInformacionPersonal(idUser int)
-begin								
-    select * from usuario_registrado inner join descripcion_usuario on usuario_registrado.id_usuario=descripcion_usuario.id_usuario;
-end;**
-delimiter ;
+#**********Obtener Informacion del perfil
+	drop procedure if exists obtenerInformacionPersonal;
+	delimiter **
+	create procedure obtenerInformacionPersonal(idUser int)
+	begin								
+		select * from usuario_registrado inner join descripcion_usuario on usuario_registrado.id_usuario=descripcion_usuario.id_usuario;
+	end;**
+	delimiter ;
+
+#**********Actualizar informacion
+	
+	drop procedure if exists actualizarInformacion;
+	delimiter **
+	create procedure actualizarInformacion(idUser int,nombreUsr varchar(50),paterno varchar(50), materno varchar(50), edadUs int, correo  varchar(50), estado int,ocupacionUsr varchar(50),descripcion varchar(300))
+	begin	
+		declare mensaje varchar(100);
+		update usuario_registrado set Nombre=nombreUsr,Apellido_Paterno=paterno,Apellido_Materno=materno,Edad=edadUs,Correo_electronico=correo,Estado_Procedencia=estado,ocupacion=ocupacionUsr where id_usuario=idUser;
+		update descripcion_usuario set descripcion_personal=descripcion where id_usuario=idUser;
+		set mensaje="Datos actualizados.";
+        select mensaje as respuesta;
+    end;**
+	delimiter ;
+
+select * from descripcion_usuario;
+call obtenerInformacionPersonal(1);
+update usuario_registrado set validado=1 where id_usuario=1;

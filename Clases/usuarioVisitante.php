@@ -40,7 +40,7 @@ class usuarioVisitante {
                         $this->mail->mandarCorreoValidacion($correo,$retorno);
                         $retorno="Registrado.Valida tu cuenta desde tu correo electrónico.";
                     }else{
-                        $retono="Este regitro ya existe.";
+                        $retorno="Este registro ya existe.";
                     }
                     $conexion->close();
                 }
