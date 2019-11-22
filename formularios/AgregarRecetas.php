@@ -16,6 +16,9 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <title></title>
      <script src="../assets/lib/ajax/jquery-3.2.1.min.js"></script>
+     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js" type="text/javascript"></script>
+     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/localization/messages_es.js" type="text/javascript"></script>
+     <script src="script.js" type="text/javascript"></script>
     </head>
     <body>
         <div id="respuesta">
