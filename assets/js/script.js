@@ -1,0 +1,9 @@
+$(document).ready(function(){
+    $("#formses").validate({
+        rules:{
+            correo:{
+                required:true
+            }
+        }
+    });
+});
