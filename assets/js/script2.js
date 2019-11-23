@@ -1,0 +1,18 @@
+$(document).ready(function(){
+    $("#formRegistro").validate({
+        rules:{
+            NombrePlatillo:{
+                required:true
+            },
+            imagen:{
+                required:true
+            },
+            idAutor:{
+                required:true
+            },
+            guardar:{
+                required:true
+            }
+        }
+    });
+});
